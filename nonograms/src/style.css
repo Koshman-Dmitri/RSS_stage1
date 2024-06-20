@@ -1,0 +1,576 @@
+/* ========== RESET ========== */
+
+* {
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+}
+
+/* ========== CONSTANTS ========== */
+
+:root {
+  --color-font-page: indianred;
+  --color-container-border: white;
+  --color-button-border: coral;
+  --color-button-bg: beige;
+  --color-button-hover: orangered;
+  --color-button-bg-hover: rgba(255, 127, 80, 0.4);
+  --color-shadow: white;
+  --color-button-stroke: #535358;
+  --color-button-muted: crimson;
+  --color-list-bg: rgba(245, 222, 179, 0.5);
+  --color-list-bg-hover: coral;
+  --color-list-color-hover: azure;
+  --color-header-shadow: crimson;
+  --color-save-message: gold;
+}
+
+[dark] {
+  --color-font-page: azure;
+  --color-container-border: darkgray;
+  --color-button-border: darkorchid;
+  --color-button-bg: #444;
+  --color-button-hover: orchid;
+  --color-button-bg-hover: #777;
+  --color-shadow: black;
+  --color-button-stroke: white;
+  --color-button-muted: darkorange;
+  --color-list-bg: darkorchid;
+  --color-list-bg-hover: rgba(255, 228, 196, 0.5);
+  --color-list-color-hover: azure;
+  --color-header-shadow: azure;
+  --color-save-message: darkmagenta;
+  --color-theme-button-dark: white;
+}
+
+/* ========== FONTS ========== */
+
+@font-face {
+  font-family: 'Shanghai';
+  src: url('../assets/fonts/shanghai.ttf');
+}
+
+@font-face {
+  font-family: 'Chow Fun';
+  src: url('../assets/fonts/Chowfun.TTF');
+}
+
+/* ========== INIT ========== */
+
+html,
+body {
+  height: 100%;
+}
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  font-family: 'Shanghai', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--color-font-page);
+  background-image: url("../assets/img/background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+[dark] .page {
+  background-image: linear-gradient(180deg,rgba(18, 18, 21, 0.9) 0%, rgba(18, 18, 21, 0.5) 50%, rgba(18, 18, 21, 0.9) 100%), url("../assets/img/background.jpg");
+}
+
+.container {
+  position: relative;
+  margin: 0 auto;
+  padding: 10px 20px;
+  max-width: 590px;
+  width: 100%;
+  border: 10px ridge var(--color-container-border);
+  border-radius: 20px;
+}
+
+.button {
+  display: block;
+  padding: 10px;
+  max-width: 250px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 2px;
+  border: thick double var(--color-button-border);
+  border-radius: 25px;
+  color: inherit;
+  background-color: var(--color-button-bg);
+  text-shadow: 3px 3px 0px var(--color-shadow);
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, color 0.3s linear, text-shadow 0.3s ease-in-out, border-color 0.5s ease-in-out;
+}
+
+.button:disabled {
+  filter: contrast(0.5);
+  pointer-events: none;
+}
+
+[dark] .button:disabled {
+  filter: contrast(0.3);
+}
+
+/* ========== MAIN ========== */
+
+.start-window,
+.level-window,
+.leader-window,
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+  transition: opacity 0.3s linear;
+}
+
+.start-window:not(.hidden),
+.level-window:not(.hidden),
+.leader-window:not(.hidden),
+.game-window:not(.hidden),
+.overlay:not(.hidden) {
+  opacity: 1;
+}
+
+/* ===== Start window ===== */
+
+.start-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  z-index: 20;
+}
+
+.title {
+  margin: 80px 0 40px;
+  font-size: 64px;
+  filter: drop-shadow(2px 2px 10px var(--color-shadow));
+}
+
+.miscelaneousBtns {
+  display: flex;
+  gap: 20px;
+}
+
+.buttonMute,
+.buttonTheme {
+  background: transparent;
+  cursor: pointer;
+}
+
+.muteBtnSvg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--color-button-stroke);
+  transition: stroke 0.3s ease-in-out;
+}
+
+.muteBtnSvg.muted {
+  stroke: var(--color-button-muted);
+}
+
+.themeBtnSvg {
+  width: 40px;
+  height: 40px;
+  fill: var(--color-button-stroke);
+  transition: fill 0.3s ease-in-out;
+}
+
+.themeBtnSvg.active {
+  fill: var(--color-theme-button-dark);
+}
+
+/* ===== Level window ===== */
+
+.level-window {
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.level-window__title {
+  margin: 16px 0 32px;
+  font-size: 48px;
+  text-align: center;
+  filter: drop-shadow(2px 2px 10px var(--color-shadow));
+}
+
+.level-window > .button_level {
+  margin-left: 60px;
+}
+
+.button_level {
+  margin-top: 10px;
+  max-width: 150px;
+  font-size: 20px;
+  border-radius: 10px;
+}
+
+.level-list {
+  margin-left: 60px;
+  padding: 0 30px;
+  max-height: 0;
+  overflow-y: hidden;
+  transition: max-height 0.3s linear;
+}
+
+.level-list_active {
+  max-height: 260px;
+}
+
+.level-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 6px 0;
+  padding: 0 20px;
+  height: 40px;
+  border: 1px solid var(--color-font-page);
+  border-radius: 10px;
+  background-color: var(--color-list-bg);
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s linear;
+}
+
+.level-window__btn-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.button-level_random,
+.button-level_main-back,
+.button-level_back {
+  padding: 4px;
+}
+
+/* ===== Game window ===== */
+
+.game-window {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 640px;
+  transition: opacity 0.3s ease-in;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.header__buttons-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stop-watch {
+  padding: 2px;
+  width: 140px;
+  font-size: 40px;
+  text-align: center;
+  filter: drop-shadow(0 0 3px var(--color-shadow));
+  box-shadow: 0 0 20px var(--color-header-shadow);
+}
+
+.button_menu {
+  max-width: 100px;
+  font-size: 24px;
+  border-radius: 10px;
+}
+
+.level-info__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px;
+  min-width: 100px;
+  box-shadow: 0 0 20px var(--color-header-shadow);
+}
+
+.level-info__difficulty {
+  font-size: 20px;
+}
+
+#canvas {
+  display: block;
+  margin: 20px auto;
+}
+
+#canvas.game-over {
+  pointer-events: none;
+}
+
+.footer {
+  display: flex;
+  gap: 8px;
+}
+
+.button_footer {
+  max-width: 100%;
+  border-radius: 10px;
+  transform: skewX(-25deg);
+}
+
+.button_footer span {
+  display: block;
+  transform: skewX(25deg);
+}
+
+.save-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 6px 10px;
+  font-size: 24px;
+  border-radius: 50%;
+  background-color: var(--color-save-message);
+  opacity: 1;
+  transition: opacity 0.3s linear;
+}
+
+/* ===== Win modal window ===== */
+
+.overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  padding: 20px;
+  max-width: 70%;
+  width: 100%;
+  text-align: center;
+  border: thick double var(--color-button-border);
+  border-radius: 25px;
+  color: inherit;
+  background-color: var(--color-button-bg);
+}
+
+.modal__result {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.result__time {
+  color: var(--color-header-shadow);
+}
+
+.button_modal {
+  margin: 0 auto;
+  max-width: 100px;
+}
+
+/* ===== Leader window ===== */
+
+.leader-window {
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.leader-window__title {
+  margin: 42px 0 50px;
+  font-size: 48px;
+  text-align: center;
+  filter: drop-shadow(2px 2px 10px var(--color-shadow));
+}
+
+.bestScoreLevel__wrapper + .bestScoreLevel__wrapper {
+  margin-top: 16px;
+}
+
+.bestScoreLevel__title {
+  text-align: center;
+  text-decoration: underline;
+}
+
+.best-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.best-item + .best-item {
+  margin-top: 8px;
+}
+
+.best-item__time {
+  max-width: 15%;
+  width: 100%;
+}
+
+.best-item__title {
+  flex-grow: 1;
+}
+
+.best-item__stars,
+.best-item__difficulty {
+  max-width: 20%;
+  width: 100%;
+}
+
+.button-top_back {
+  margin: auto auto 0;
+}
+
+/* ========== MEDIA ========== */
+
+/* ===== :HOVER ===== */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .button:hover {
+    border: thick solid var(--color-button-hover);
+    color: var(--color-button-hover);
+    background-color: var(--color-button-bg-hover);
+    text-shadow: -2px -2px 2px var(--color-shadow);
+  }
+
+  .level-list__item:hover {
+    border-color: var(--color-list-bg);
+    color: var(--color-list-color-hover);
+    background-color: var(--color-list-bg-hover);
+  }
+
+  #canvas {
+    cursor: pointer;
+  }
+
+}
+
+/* ===== 768px ===== */
+
+@media (max-width: 768px) {
+
+  .page {
+    height: unset;
+    background-size: unset;
+  }
+
+}
+
+/* ===== 620px ===== */
+
+@media (max-width: 620px) {
+
+  .start-window {
+    gap: 20px;
+  }
+
+  .button {
+    padding: 4px;
+  }
+
+  .game-window {
+    min-height: 580px;
+  }
+
+  .stop-watch {
+    font-size: 28px;
+    width: 100px;
+  }
+
+  .header__buttons-wrapper {
+    gap: 10px;
+  }
+
+  .muteBtnSvg,
+  .themeBtnSvg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .button_menu {
+    max-width: 80px;
+    font-size: 20px;
+  }
+
+  .level-info__difficulty {
+    font-size: 18px;
+  }
+
+  #canvas {
+    margin: 10px auto;
+  }
+
+  .level-window__title {
+    margin: 0;
+  }
+
+  .level-window > .button_level {
+    margin-left: 30px;
+  }
+
+  .level-list {
+    margin-left: 30px;
+  }
+
+  .leader-window {
+    font-size: 16px;
+  }
+
+  .leader-window__title {
+    font-size: 42px;
+  }
+
+}
+
+/* ===== 550px ===== */
+
+@media (max-width: 550px) {
+
+  .header {
+    justify-content: space-between;
+  }
+
+  .level-info__wrapper {
+    font-size: 16px;
+  }
+
+}
+
+/* ===== 470px ===== */
+
+@media (max-width: 470px) {
+
+  .title {
+    font-size: 48px;
+  }
+
+}
